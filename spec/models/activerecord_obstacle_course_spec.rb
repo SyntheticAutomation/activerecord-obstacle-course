@@ -57,7 +57,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    order_id = Order.first.id
+    order_id = Order.order("amount ASC").first.id
     # ------------------------------------------------------------
 
     # Expectation
@@ -70,7 +70,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    order_id = Order.last.id
+    order_id = Order.order("amount DESC").last.id
     # ------------------------------------------------------------
 
     # Expectation
@@ -122,7 +122,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    orders = Order.find([1,3,5,7])
+    orders = Order.where(:id => ids)
     # ------------------------------------------------------------
 
     # Expectation
@@ -167,7 +167,7 @@ describe 'ActiveRecord Obstacle Course' do
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    orders_of_user_3 = Order.where("user_id = 3")
+    orders_of_user_3 = Order.where(user_id: 3)
     # ------------------------------------------------------------
 
     # Expectation
@@ -433,7 +433,7 @@ describe 'ActiveRecord Obstacle Course' do
     # -----------------------------------------------------------
 
     # ------------------ Improved Solution ----------------------
-     orders = Order.joins(:order_items).select("orders.*").where("item_id = 4")
+     orders = Order.joins(:order_items).where("item_id = 4")
     # -----------------------------------------------------------
 
     # Expectation
@@ -594,7 +594,10 @@ describe 'ActiveRecord Obstacle Course' do
     # how will you turn this into the proper ActiveRecord commands?
 
     # ------------------ ActiveRecord Solution ----------------------
-    data = User.joins(:order_items).group("users.name", "orders.id").order("users.name DESC").select("users.name as user_name, orders.id as order_id, count(order_items.id) as item_count")
+    data = User.joins(:order_items)
+    .group("users.name", "orders.id")
+    .order("users.name DESC")
+    .select("users.name as user_name, orders.id as order_id, count(order_items.id) as item_count")
     # ---------------------------------------------------------------
 
 
